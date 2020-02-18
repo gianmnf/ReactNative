@@ -1,0 +1,5 @@
+npm i -g yarn@berry react-native-cli
+react init nomeDoProjeto
+npm i react-native-vector-icons
+react-native link
+npm i react-native-exit-app
