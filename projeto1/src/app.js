@@ -3,15 +3,16 @@ import {   StatusBar } from 'react-native';
  
 import colors from './styles/colors';
 
-import Login from './pages/login'
+import Routes from './routes'
+import Login from './pages/login';
 
 function App() {
 
   return (
 
     <>
-      <StatusBar barStyle="light-content" backgroundColor={colors.fundo} />
-      <Login />
+      <StatusBar barStyle="light-content" backgroundColor={colors.amareloMenu} />
+      <Routes />
     </>
   );
 }

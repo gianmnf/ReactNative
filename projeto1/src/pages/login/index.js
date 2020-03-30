@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch, connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNExitApp from 'react-native-exit-app';
@@ -18,14 +19,24 @@ import styles from './styles';
 
 //{navigation}
 
-function Login({navigation}) {
+function Login({ navigation }) {
   const [ideUsuario, setIdeUsuario] = useState('');
   const [senha, setSenha] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     inicializar();
   }, []);
+
+  useEffect(() => {
+    if (auth.navegar === true) {
+      navigation.navigate("Main");
+      dispatch({ type: 'SIGN_IN_INICIAL' });
+    }
+  }, [auth.navegar]);
 
   async function inicializar() {
     setIdeUsuario('');
@@ -41,15 +52,12 @@ function Login({navigation}) {
   }
 
   function autenticar() {
-    if (ideUsuario === '') {
-      alert('Usuário não informado');
-      return;
-    }
+    var user = {
+      ideUsuario: ideUsuario,
+      senha: senha,
+    };
 
-    if (senha === '') {
-      alert('Senha não informada');
-      return;
-    }
+    dispatch({ type: 'SIGN_IN_REQUEST', user });
   }
 
   function cancelar() {
@@ -101,7 +109,8 @@ function Login({navigation}) {
             <Text style={styles.buttonText}>Cancelar</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => autenticar()}>
-            <Text style={styles.buttonText}>Autenticar</Text>
+            {auth.loading && <ActivityIndicator size="large" color="white" />}
+            {!auth.loading && <Text style={styles.buttonText}>Autenticar</Text>}
           </TouchableOpacity>
         </View>
       </View>
