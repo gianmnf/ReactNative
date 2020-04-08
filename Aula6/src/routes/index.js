@@ -13,7 +13,6 @@ import Detalhar from '../pages/detalhar';
 import Ajuda from '../pages/ajuda';
 import Sair from '../pages/sair';
 import CadastroUsuario from '../pages/cadastroUsuario';
-import AtualizarUsuario from '../pages/atualizarUsuario';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -28,22 +27,6 @@ const AjudaPage = createStackNavigator({
     screen: Ajuda,
     navigationOptions: ({navigation}) => ({
       title: 'Ajuda',
-      headerLeft: () => (
-        <NavigationDrawerStructure navigationProps={navigation} />
-      ),
-      headerStyle: {
-        backgroundColor: Colors.fundo,
-      },
-      headerTintColor: Colors.fundo,
-    }),
-  },
-});
-
-const AtualizarUsuarioPage = createStackNavigator({
-  First: {
-    screen: AtualizarUsuario,
-    navigationOptions: ({navigation}) => ({
-      title: 'Atualizar Usuário',
       headerLeft: () => (
         <NavigationDrawerStructure navigationProps={navigation} />
       ),
@@ -191,7 +174,6 @@ const DrawerNavigatorMenu = createDrawerNavigator(
     Ajuda: AjudaPage,
     Sair: SairPage,
     Hidden: HiddenPage,
-    AtualizarUsuario: AtualizarUsuarioPage
   },
   {
     contentComponent: Menu,

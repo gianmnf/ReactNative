@@ -56,35 +56,6 @@ export function incluirUsuario(usuario) {
   });
 }
 
-export function atualizarUsuario(usuario) {
-  return new Promise((resolve, reject) => {
-    try {
-      var sql =
-        'update Usuario set NomeUsuario = ?, IdeUsuario = ?, SenhaUsuario = ?, Email = ?' +
-        'where IdUsuario = ?' ;
-
-      const db = OpenDataBase();
-      db.transaction(tx => {
-        tx.executeSql(
-          sql,
-          [
-            usuario.nomeUsuario,
-            usuario.ideUsuario,
-            usuario.senhaUsuario,
-            usuario.email,
-            usuario.IdUsuario
-          ],
-          (tx, results) => {
-            console.tron.log(resolve(usuario));
-          },
-        );
-      });
-    } catch (err) {
-      reject(err.message);
-    }
-  });
-}
-
 export function obterPorEmail(email) {
   return new Promise((resolve, reject) => {
     try {

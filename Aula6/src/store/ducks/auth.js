@@ -9,7 +9,6 @@ const {Types, Creators} = createActions({
   signInCancel: null,
   signInInicial: null,
   cadastrarUsuarioRequest: ['user'],
-  atualizarUsuarioRequest: ['user']
 });
 
 export const AuthTypes = Types;
@@ -78,19 +77,6 @@ export const cadastrarUsuarioRequestReducer = state =>
     usuario: null,
   });
 
-  export const atualizarUsuarioRequestReducer = (state, {user}) =>
-  state.merge({
-    loading: true,
-    login: false,
-    navegar: false,
-    idUsuario: user.idUsuario,
-    ideUsuario: user.ideUsuario,
-    senhaUsuario: user.senhaUsuario,
-    email: user.email,
-    nomeUsuario: user.nomeUsuario,
-    usuario: user,
-  });
-
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGN_IN_REQUEST]: signInRequestReducer,
   [Types.SIGN_IN_SUCCESS]: signInSuccessReducer,
@@ -98,5 +84,4 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGN_IN_CANCEL]: signInCancelReducer,
   [Types.SIGN_IN_INICIAL]: signInInicialReducer,
   [Types.CADASTRAR_USUARIO_REQUEST]: cadastrarUsuarioRequestReducer,
-  [Types.ATUALIZAR_USUARIO_REQUEST]: atualizarUsuarioRequestReducer
 });

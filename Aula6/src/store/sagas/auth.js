@@ -7,7 +7,6 @@ import {ValidarEmail} from '../../utils/validarEmail';
 import {
   obterPorIdeUsuario,
   incluirUsuario,
-  atualizarUsuario,
   obterPorEmail,
 } from '../../services/usuarioService';
 
@@ -138,28 +137,6 @@ function* incluir(usuario) {
   return retorno;
 }
 
-function* atualizar(usuario) {
-  const retorno = yield atualizarUsuario(usuario)
-    .then(resp => {
-      var ret = {
-        tipo: 1,
-        mensagem: '',
-        usuario: resp,
-      };
-
-      return ret;
-    })
-    .catch(erro => {
-      var ret = {
-        tipo: 2,
-        mensagem: erro,
-        usuario: null,
-      };
-      return ret;
-    });
-  return retorno;
-}
-
 /* Função para cadastrar um usuário */
 export function* cadastrarUsuario(action) {
   try {
@@ -206,67 +183,6 @@ export function* cadastrarUsuario(action) {
           2,
           retorno.usuario,
           'Inclusão efetuada com sucesso',
-        );
-        return;
-      } else {
-        yield apresentarMensagem(1, action.user, retorno.mensagem);
-        return;
-      }
-    } else {
-      yield apresentarMensagem(1, action.user, 'Sem conexão com internet');
-    }
-  } catch (err) {
-    yield apresentarMensagem(1, action.user, err.message);
-    return;
-  }
-}
-
-/* Função para atualizar um usuário */
-export function* alterarUsuario(action) {
-  try {
-    const {isConnected} = yield NetInfo.fetch();
-    if (isConnected) {
-      var mensagemErro = yield consistirDadosUsuario(2, action.user);
-      if (mensagemErro !== '') {
-        yield apresentarMensagem(1, action.user, mensagemErro);
-        return;
-      }
-
-      // Pesquisar se existe um usuário com esta identificação
-      var retorno = yield pesquisarUsuarioPorIdentificacaoDoUsuario(
-        action.user.ideUsuario,
-      );
-
-      if (retorno.tipo === 1) {
-        yield apresentarMensagem(
-          1,
-          action.user,
-          'Identificação do Usuário já existente',
-        );
-        return;
-      }
-      // Pesquisar se existe um usuário com este email
-      var retorno = yield pesquisarUsuarioPorEmail(action.user.email);
-
-      if (retorno.tipo === 1) {
-        yield apresentarMensagem(
-          1,
-          action.user,
-          'Email do Usuário já existente',
-        );
-        return;
-      }
-
-      ToastActionsCreators.displayInfo('Atualizar Usuário');
-
-      // Atualizar usuário
-      var retorno = yield atualizar(action.user);
-
-      if (retorno.tipo === 1) {
-        yield apresentarMensagem(
-          2,
-          retorno.usuario,
-          'Atualização efetuada com sucesso',
         );
         return;
       } else {

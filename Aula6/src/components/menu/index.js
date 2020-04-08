@@ -61,10 +61,6 @@ function Menu({ navigation }) {
                     <Icon name="info-circle" style={Styles.icone} />
                     <Text style={[Styles.screenTextStyle, (activeItemKey == 'Ajuda') ? Styles.selectedTextStyle : null]} onPress={() => navigateToScreen('Ajuda')}>Ajuda</Text>
                 </View>
-                <View style={[Styles.screenStyle, (activeItemKey == 'AtualizarUsuario') ? Styles.activeBackgroundColor : null]}>
-                    <Icon name="cogs" style={Styles.icone} />
-                    <Text style={[Styles.screenTextStyle, (activeItemKey == 'AtualizarUsuario') ? Styles.selectedTextStyle : null]} onPress={() => navigateToScreen('AtualizarUsuario')}>Atualizar Dados</Text>
-                </View>
                 <View style={[Styles.screenStyle, (activeItemKey == 'Main') ? Styles.activeBackgroundColor : null]}>
                     <Icon name="user-o" style={Styles.icone} />
                     <Text style={[Styles.screenTextStyle, (activeItemKey == 'Main') ? Styles.selectedTextStyle : null]} onPress={() => navigateToScreen('Main')}>Principal</Text>
