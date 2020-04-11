@@ -84,6 +84,26 @@ function Menu({navigation}) {
           </Text>
         </View>
 
+        <View
+          style={[
+            Styles.screenStyle,
+            activeItemKey == 'CadastroImovel'
+              ? Styles.activeBackgroundColor
+              : null,
+          ]}>
+          <Icon name="user-o" style={Styles.icone} />
+          <Text
+            style={[
+              Styles.screenTextStyle,
+              activeItemKey == 'CadastroImovel'
+                ? Styles.selectedTextStyle
+                : null,
+            ]}
+            onPress={() => navigateToScreen('CadastroImovel')}>
+            Cadastro de Imóvel
+          </Text>
+        </View>
+
         <View style={Styles.line}>
           <View style={Styles.lineTwoComplemento} />
         </View>

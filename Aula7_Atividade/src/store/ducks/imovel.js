@@ -21,5 +21,5 @@ export const cadastrarImovelRequestReducer = state =>
   });
 
 export const reducer = createReducer(INITIAL_STATE, {
- [Types.CADASTRAR_IMOVEL_REQUEST]: cadastrarImovelRequestReducer,
+  [Types.CADASTRAR_IMOVEL_REQUEST]: cadastrarImovelRequestReducer,
 });

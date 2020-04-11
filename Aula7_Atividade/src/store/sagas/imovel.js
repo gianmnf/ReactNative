@@ -8,26 +8,30 @@ import {
   incluirImovel,
 } from '../../services/imovelService';
 
-import AuthActions from '../ducks/auth';
+import AuthActions from '../ducks/imovel';
 
 function* apresentarMensagem(tipo, user, mensagem) {
   if (tipo === 1) {
-    yield put(AuthActions.signInFailure(user));
     yield put(ToastActionsCreators.displayError(mensagem));
   } else {
-    yield put(AuthActions.signInSuccess(user));
     yield put(ToastActionsCreators.displayInfo(mensagem));
   }
 }
 
 function* pesquisarImovelPorDescricao(descricaoImovel) {
   const retorno = yield obterPorDescricaoImovel(descricaoImovel)
+  return retorno;
+}
+
+function* incluir(imovel) {
+  const retorno = yield incluirImovel(imovel)
     .then(resp => {
       var ret = {
         tipo: 1,
         mensagem: '',
         imovel: resp,
       };
+
       return ret;
     })
     .catch(erro => {
@@ -41,54 +45,32 @@ function* pesquisarImovelPorDescricao(descricaoImovel) {
   return retorno;
 }
 
-function* incluir(imovel) {
-  const retorno = yield incluirImovel(imovel)
-    .then(resp => {
-      var ret = {
-        tipo: 1,
-        mensagem: '',
-        usuario: resp,
-      };
-
-      return ret;
-    })
-    .catch(erro => {
-      var ret = {
-        tipo: 2,
-        mensagem: erro,
-        usuario: null,
-      };
-      return ret;
-    });
-  return retorno;
-}
-
 export function* manterImovel(action) {
   try {
     const {isConnected} = yield NetInfo.fetch();
     if (isConnected) {
-      var mensagemErro = yield consistirDadosImovel(2, action.user);
+      var mensagemErro = yield consistirDadosImovel(2, action.imovel);
       if (mensagemErro !== '') {
-        yield apresentarMensagem(1, action.user, mensagemErro);
+        yield apresentarMensagem(1, action.imovel, mensagemErro);
         return;
       }
 
       // Pesquisar se existe um imóvel com esta identificação
       var retorno = yield pesquisarImovelPorDescricao(
-        action.user.descricaoImovel,
+        action.imovel.descricaoImovel,
       );
 
       if (
         retorno.tipo === 1 &&
-        retorno.imovel.descricaoImovel !== action.user.descricaoImovel
+        retorno.imovel.descricaoImovel !== action.imovel.descricaoImovel
       ) {
-        yield apresentarMensagem(1, action.user, 'Imóvel já existente');
+        yield apresentarMensagem(1, action.imovel, 'Imóvel já existente');
         return;
       }
 
-      if (action.user.idImovel === 0) {
+      if (action.imovel.idImovel === 0) {
         ToastActionsCreators.displayInfo('Incluindo Imóvel');
-        var retorno = yield incluir(action.user);
+        var retorno = yield incluir(action.imovel);
         if (retorno.tipo === 1) {
           yield apresentarMensagem(
             2,
@@ -97,20 +79,21 @@ export function* manterImovel(action) {
           );
           return;
         } else {
-          yield apresentarMensagem(1, action.user, retorno.mensagem);
+          yield apresentarMensagem(1, action.imovel, retorno.mensagem);
           return;
         }
       }
     } else {
-      yield apresentarMensagem(1, action.user, 'Sem conexão com internet');
+      yield apresentarMensagem(1, action.imovel, 'Sem conexão com internet');
     }
   } catch (err) {
-    yield apresentarMensagem(1, action.user, err.message);
+    yield apresentarMensagem(1, action.imovel, err.message);
     return;
   }
 }
 
 function consistirDadosImovel(origem, user) {
+  console.log(user);
   if (origem === 2) {
     if (user.descricaoImovel === '') {
       return 'Favor informar a descrição do Imovel.';

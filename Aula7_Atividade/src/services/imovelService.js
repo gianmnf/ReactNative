@@ -57,7 +57,7 @@ export function incluirImovel(imovel) {
   return new Promise((resolve, reject) => {
     try {
       var sql =
-        'insert into Imovel (DescricaoImovel, Email, LogradouroImovel, Numero, Complemento, Bairro, Cidade, UF, IdUsuario, SituacaoImovel) ' +
+        'insert into Imovel (DescricaoImovel, Email, LogradouroImovel, Numero, Complemento, Bairro, Cidade,CEP, UF, IdUsuario, SituacaoImovel) ' +
         ' values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
       const db = OpenDataBase();
@@ -72,11 +72,13 @@ export function incluirImovel(imovel) {
             imovel.Complemento,
             imovel.Bairro,
             imovel.Cidade,
+            imovel.CEP,
             imovel.UF,
             imovel.IdUsuario,
             imovel.SituacaoImovel,
           ],
           (tx, results) => {
+            console.log(results);
             imovel.idImovel = results.insertId;
             resolve(imovel);
           },
@@ -92,7 +94,7 @@ export function alterarImovel(imovel) {
   return new Promise((resolve, reject) => {
     try {
       var sql =
-        'update Imovel set DescricaoImovel = ?, Email = ?, LogradouroImovel = ?, Numero = ?, Complemento = ?, Bairro = ?, Cidade = ?, UF = ?, ' +
+        'update Imovel set DescricaoImovel = ?, Email = ?, LogradouroImovel = ?, Numero = ?, Complemento = ?, Bairro = ?, Cidade = ?, CEP = ?, UF = ?, ' +
         ' IdUsuario = ?, SituacaoImovel = ? ' +
         ' where idImovel = ?';
 
@@ -108,6 +110,7 @@ export function alterarImovel(imovel) {
             imovel.Complemento,
             imovel.Bairro,
             imovel.Cidade,
+            imovel.CEP,
             imovel.UF,
             imovel.IdUsuario,
             imovel.SituacaoImovel,
@@ -124,32 +127,6 @@ export function alterarImovel(imovel) {
   });
 }
 
-/* export function obterPorEmail(email) {
-  return new Promise((resolve, reject) => {
-    try {
-      const sql =
-        'select * from usuario where lower(email)="' +
-        email.toLowerCase() +
-        '"';
-
-      const db = OpenDataBase();
-      db.transaction(tx => {
-        tx.executeSql(sql, [], (tx, results) => {
-          if (results.rows.length === 0) {
-            reject('Usuário inexistente');
-          }
-
-          var usuario = montarUsuario(results.rows.item(0));
-
-          resolve(usuario);
-        });
-      });
-    } catch (err) {
-      reject(err.message);
-    }
-  });
-} */
-
 function montarImovel(dado) {
   var imovel = new Imovel();
   imovel.idImovel = dado.idImovel;
@@ -160,6 +137,7 @@ function montarImovel(dado) {
   imovel.complemento = dado.complemento;
   imovel.bairro = dado.bairro;
   imovel.cidade = dado.cidade;
+  imovel.cep = dado.cep;
   imovel.uf = dado.uf;
   imovel.idUsuario = dado.idUsuario;
   imovel.situacaoImovel = dado.situacaoImovel;
