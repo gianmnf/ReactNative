@@ -8,8 +8,6 @@ import {
   incluirImovel,
 } from '../../services/imovelService';
 
-import AuthActions from '../ducks/imovel';
-
 function* apresentarMensagem(tipo, user, mensagem) {
   if (tipo === 1) {
     yield put(ToastActionsCreators.displayError(mensagem));
@@ -74,7 +72,7 @@ export function* manterImovel(action) {
         if (retorno.tipo === 1) {
           yield apresentarMensagem(
             2,
-            retorno.usuario,
+            retorno.imovel,
             'Inclusão efetuada com sucesso',
           );
           return;

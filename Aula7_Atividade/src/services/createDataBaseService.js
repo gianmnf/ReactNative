@@ -30,7 +30,7 @@ export function CreateDataBaseService() {
       ' IdUsuario smallint NOT NULL,' +
       ' SituacaoImovel VARCHAR(1) NOT NULL,' +
       ' FOREIGN KEY(IdUsuario) REFERENCES Usuario(IdUsuario)';
-    const sqlCreateIndexUserIdImovel =
+    const sqlCreateIndexIdImovel =
       'CREATE UNIQUE INDEX IF NOT EXISTS [IX_IdImovel] ON [Imovel] ([IdImovel]);';
 
     db.transaction(function(txn) {
@@ -38,7 +38,7 @@ export function CreateDataBaseService() {
       txn.executeSql(sqlCreateIndexUserIdeUsuario, []);
       txn.executeSql(sqlCreateIndexUserEmail, []);
       txn.executeSql(sqlCreateTableImovel, []);
-      txn.executeSql(sqlCreateIndexUserIdImovel, []);
+      txn.executeSql(sqlCreateIndexIdImovel, []);
     });
 
     return '';

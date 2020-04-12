@@ -3,6 +3,7 @@ import {useSelector, useDispatch, connect} from 'react-redux';
 
 import {withNavigationFocus} from 'react-navigation';
 import ContactList from '../../components/contactList';
+import ImovelList from '../../components/imovelList';
 import CadastroUsuario from '../cadastroUsuario';
 
 import {
@@ -48,11 +49,7 @@ function Main({navigation, isFocused}) {
   };
 
   if (tab === 1) {
-    return (
-      <View>
-        <Text>Pasta1</Text>
-      </View>
-    );
+    return <ImovelList />;
   }
   if (tab === 2) {
     return <CadastroUsuario tipoManutencaoParametro="Alteracao" />;
