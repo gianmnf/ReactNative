@@ -3,8 +3,8 @@ import {useSelector, useDispatch, connect} from 'react-redux';
 
 import {withNavigationFocus} from 'react-navigation';
 import ContactList from '../../components/contactList';
-import ImovelList from '../../components/imovelList';
 import CadastroUsuario from '../cadastroUsuario';
+import HouseList from '../../components/houseList';
 
 import {
   View,
@@ -34,7 +34,6 @@ function Main({navigation, isFocused}) {
   }, [isFocused]);
 
   function NavegarPasta1() {
-    console.tron.log('NavegarPasta1');
     setTab(1);
   }
   function NavegarPasta2() {
@@ -44,12 +43,8 @@ function Main({navigation, isFocused}) {
     setTab(3);
   }
 
-  saibaMais = (objeto) => {
-    //navigation.navigate("Detalhar", { objeto });
-  };
-
   if (tab === 1) {
-    return <ImovelList />;
+    return <HouseList />;
   }
   if (tab === 2) {
     return <CadastroUsuario tipoManutencaoParametro="Alteracao" />;

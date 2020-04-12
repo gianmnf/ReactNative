@@ -68,6 +68,27 @@ function Menu({navigation}) {
             Ajuda
           </Text>
         </View>
+
+        <View
+          style={[
+            Styles.screenStyle,
+            activeItemKey == 'CadastroImovel'
+              ? Styles.activeBackgroundColor
+              : null,
+          ]}>
+          <Icon name="home" style={Styles.icone} />
+          <Text
+            style={[
+              Styles.screenTextStyle,
+              activeItemKey == 'CadastroImovel'
+                ? Styles.selectedTextStyle
+                : null,
+            ]}
+            onPress={() => navigateToScreen('CadastroImovel')}>
+            Cadastro de Imóvel
+          </Text>
+        </View>
+
         <View
           style={[
             Styles.screenStyle,
@@ -81,26 +102,6 @@ function Menu({navigation}) {
             ]}
             onPress={() => navigateToScreen('Main')}>
             Principal
-          </Text>
-        </View>
-
-        <View
-          style={[
-            Styles.screenStyle,
-            activeItemKey == 'CadastroImovel'
-              ? Styles.activeBackgroundColor
-              : null,
-          ]}>
-          <Icon name="user-o" style={Styles.icone} />
-          <Text
-            style={[
-              Styles.screenTextStyle,
-              activeItemKey == 'CadastroImovel'
-                ? Styles.selectedTextStyle
-                : null,
-            ]}
-            onPress={() => navigateToScreen('CadastroImovel')}>
-            Cadastro de Imóvel
           </Text>
         </View>
 

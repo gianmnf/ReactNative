@@ -1,4 +1,3 @@
-
 export default class Imovel {
   idImovel: int;
   descricaoImovel: String;
@@ -15,6 +14,7 @@ export default class Imovel {
   constructor() {
     this.idImovel = 0;
     this.descricaoImovel = '';
+    this.email = '';
     this.logradouroImovel = '';
     this.numero = 0;
     this.complemento = '';

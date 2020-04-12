@@ -17,28 +17,23 @@ export function CreateDataBaseService() {
       'CREATE UNIQUE INDEX IF NOT EXISTS [IX_Email] ON [Usuario] ([EMail]);';
     const sqlCreateTableImovel =
       'CREATE TABLE IF NOT EXISTS Imovel (' +
-      ' IdImovel smallint PRIMARY KEY AUTOINCREMENT NOT NULL,' +
+      ' IdImovel INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,' +
       ' DescricaoImovel VARCHAR(200) NOT NULL,' +
       ' Email VARCHAR(200) NOT NULL,' +
       ' LogradouroImovel VARCHAR(200) NOT NULL,' +
-      ' Numero smallint NOT NULL,' +
+      ' Numero SMALLINT NOT NULL,' +
       ' Complemento VARCHAR(30),' +
       ' Bairro VARCHAR(50) NOT NULL,' +
-      ' Cidade VARCHAR(50) NOT NULL,' +
-      ' CEP smallint NOT NULL,' +
+      ' CEP INTEGER NOT NULL,' +
       ' UF VARCHAR(2) NOT NULL,' +
-      ' IdUsuario smallint NOT NULL,' +
+      ' IdUsuario SMALLINT NOT NULL,' +
       ' SituacaoImovel VARCHAR(1) NOT NULL,' +
-      ' FOREIGN KEY(IdUsuario) REFERENCES Usuario(IdUsuario)';
-    const sqlCreateIndexIdImovel =
-      'CREATE UNIQUE INDEX IF NOT EXISTS [IX_IdImovel] ON [Imovel] ([IdImovel]);';
-
+      ' FOREIGN KEY(IdUsuario) REFERENCES Usuario(IdUsuario));';
     db.transaction(function(txn) {
       txn.executeSql(sqlCreateTableUser, []);
       txn.executeSql(sqlCreateIndexUserIdeUsuario, []);
       txn.executeSql(sqlCreateIndexUserEmail, []);
       txn.executeSql(sqlCreateTableImovel, []);
-      txn.executeSql(sqlCreateIndexIdImovel, []);
     });
 
     return '';

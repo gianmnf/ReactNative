@@ -1,25 +1,22 @@
 import {call, put, select} from 'redux-saga/effects';
 import NetInfo from '@react-native-community/netinfo';
-//import AsyncStorage from '@react-native-community/async-storage';
 import {ToastActionsCreators} from 'react-native-redux-toast';
+import {ValidarEmail} from '../../utils/validarEmail';
 
-import {
-  obterPorDescricaoImovel,
-  incluirImovel,
-} from '../../services/imovelService';
+import {incluirImovel} from '../../services/imovelService';
+
+import ImovelActions from '../ducks/imovel';
 
 function* apresentarMensagem(tipo, user, mensagem) {
   if (tipo === 1) {
     yield put(ToastActionsCreators.displayError(mensagem));
   } else {
+    yield put(ImovelActions.cadastrarImovelRequestSuccess(user));
     yield put(ToastActionsCreators.displayInfo(mensagem));
   }
 }
 
-function* pesquisarImovelPorDescricao(descricaoImovel) {
-  const retorno = yield obterPorDescricaoImovel(descricaoImovel)
-  return retorno;
-}
+/* Função para incluir um imóvel */
 
 function* incluir(imovel) {
   const retorno = yield incluirImovel(imovel)
@@ -43,32 +40,21 @@ function* incluir(imovel) {
   return retorno;
 }
 
+/* Função para cadastrar um imóvel */
 export function* manterImovel(action) {
+  console.tron.log(action.house);
   try {
     const {isConnected} = yield NetInfo.fetch();
     if (isConnected) {
-      var mensagemErro = yield consistirDadosImovel(2, action.imovel);
+      var mensagemErro = yield consistirDadosImovel(2, action.house);
       if (mensagemErro !== '') {
-        yield apresentarMensagem(1, action.imovel, mensagemErro);
+        yield apresentarMensagem(1, action.house, mensagemErro);
         return;
       }
-
-      // Pesquisar se existe um imóvel com esta identificação
-      var retorno = yield pesquisarImovelPorDescricao(
-        action.imovel.descricaoImovel,
-      );
-
-      if (
-        retorno.tipo === 1 &&
-        retorno.imovel.descricaoImovel !== action.imovel.descricaoImovel
-      ) {
-        yield apresentarMensagem(1, action.imovel, 'Imóvel já existente');
-        return;
-      }
-
-      if (action.imovel.idImovel === 0) {
+      if (action.house.idImovel === 0) {
+        console.tron.log('Chegou Aqui');
         ToastActionsCreators.displayInfo('Incluindo Imóvel');
-        var retorno = yield incluir(action.imovel);
+        var retorno = yield incluir(action.house);
         if (retorno.tipo === 1) {
           yield apresentarMensagem(
             2,
@@ -77,55 +63,54 @@ export function* manterImovel(action) {
           );
           return;
         } else {
-          yield apresentarMensagem(1, action.imovel, retorno.mensagem);
+          yield apresentarMensagem(1, action.user, retorno.mensagem);
           return;
         }
       }
     } else {
-      yield apresentarMensagem(1, action.imovel, 'Sem conexão com internet');
+      yield apresentarMensagem(1, action.house, 'Sem conexão com internet');
     }
   } catch (err) {
-    yield apresentarMensagem(1, action.imovel, err.message);
+    yield apresentarMensagem(1, action.house, err.message);
     return;
   }
 }
 
-function consistirDadosImovel(origem, user) {
-  console.log(user);
+function consistirDadosImovel(origem, house) {
   if (origem === 2) {
-    if (user.descricaoImovel === '') {
-      return 'Favor informar a descrição do Imovel.';
+    if (house.descricaoImovel === '') {
+      return 'Favor informar a descrição do Imóvel.';
     }
-    if (user.email === '') {
+    if (house.email === '') {
       return 'Favor informar o Email.';
     }
-    if (user.logradouroImovel === '') {
-      return 'Favor informar o logradouro do Imovel.';
+    if (ValidarEmail(house.email) === false) {
+      return 'Favor informar um Email válido.';
     }
-    if (user.numero === '') {
-      return 'Favor informar o Número do Imovel.';
+    if (house.logradouroImovel === '') {
+      return 'Favor informar o Logradouro do Imóvel.';
     }
-    if (user.bairro === '') {
-      return 'Favor informar o bairro em que se encontra o Imovel.';
+    if (house.numero === '') {
+      return 'Favor informar o Número do Imóvel.';
     }
-    if (user.cidade === '') {
-      return 'Favor informar a cidade.';
+    if (house.bairro === '') {
+      return 'Favor informar o Bairro.';
     }
-    if (user.cep === '') {
-      return 'Favor informar o cep do Imovel.';
+    if (house.cidade === '') {
+      return 'Favor informar a Cidade.';
     }
-    if (user.uf === '') {
+    if (house.cep === '') {
+      return 'Favor informar o CEP.';
+    }
+    if (house.uf === '') {
       return 'Favor informar a UF.';
     }
-    if (user.situacaoImovel === '') {
-      return 'Favor informar a situacao do Imovel.';
+    if (house.situacaoImovel === '') {
+      return 'Favor informar a situação do Imóvel.';
     }
-    /* if (ValidarEmail(user.email) === false) {
-        return 'Favor informar o EMail do Usuário válido.';
-      } */
   }
-  if (user.idUsuario === '') {
-    return 'Favor informar a Identificação do Usuário.';
+  if (house.idUsuario === '') {
+    return 'Favor informar o ID do Usuário.';
   }
   return '';
 }

@@ -13,7 +13,6 @@ import Detalhar from '../pages/detalhar';
 import Ajuda from '../pages/ajuda';
 import Sair from '../pages/sair';
 import CadastroUsuario from '../pages/cadastroUsuario';
-
 import CadastroImovel from '../pages/cadastroImovel';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -41,10 +40,10 @@ const AjudaPage = createStackNavigator({
 });
 
 const CadastroImovelPage = createStackNavigator({
-  ImovelP: {
+  CadImovel: {
     screen: CadastroImovel,
     navigationOptions: ({navigation}) => ({
-      title: 'Cadastro de Imóvel',
+      title: 'Cad',
       headerLeft: () => (
         <NavigationDrawerStructure navigationProps={navigation} />
       ),
@@ -193,9 +192,9 @@ const DrawerNavigatorMenu = createDrawerNavigator(
     Main: MainPage,
     Login: LoginPage,
     Ajuda: AjudaPage,
+    CadastroImovel: CadastroImovelPage,
     Sair: SairPage,
     Hidden: HiddenPage,
-    CadastroImovel: CadastroImovelPage,
   },
   {
     contentComponent: Menu,
