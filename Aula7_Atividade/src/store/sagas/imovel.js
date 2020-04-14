@@ -56,6 +56,7 @@ export function* manterImovel(action) {
         ToastActionsCreators.displayInfo('Incluindo Imóvel');
         var retorno = yield incluir(action.house);
         if (retorno.tipo === 1) {
+          console.tron.log('Chegou no if');
           yield apresentarMensagem(
             2,
             retorno.imovel,
@@ -63,14 +64,17 @@ export function* manterImovel(action) {
           );
           return;
         } else {
+          console.tron.log('Chegou no else');
           yield apresentarMensagem(1, action.user, retorno.mensagem);
           return;
         }
       }
     } else {
+      console.tron.log('Chegou no else 2');
       yield apresentarMensagem(1, action.house, 'Sem conexão com internet');
     }
   } catch (err) {
+    console.tron.log('Chegou no catch');
     yield apresentarMensagem(1, action.house, err.message);
     return;
   }
