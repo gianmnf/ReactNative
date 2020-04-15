@@ -48,13 +48,13 @@ function CadastroImovel({navigation}) {
     setCidade('');
     setCep('');
     setUf('');
-    setIdUsuario(auth.usuario.idUsuario);
     setSituacaoImovel('');
   }
 
   function salvar() {
     var house = new Imovel();
-    house.idUsuario = idUsuario;
+    house.idUsuario = auth.usuario.idUsuario;
+    house.usuario = auth.usuario;
     house.descricaoImovel = descricaoImovel;
     house.email = email;
     house.logradouroImovel = logradouroImovel;

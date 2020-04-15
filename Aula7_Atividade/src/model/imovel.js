@@ -1,3 +1,5 @@
+import Usuario from './usuario';
+
 export default class Imovel {
   idImovel: int;
   descricaoImovel: String;
@@ -10,6 +12,7 @@ export default class Imovel {
   cep: int;
   uf: String;
   idUsuario: int;
+  usuario: Usuario;
   situacaoImovel: String;
   constructor() {
     this.idImovel = 0;
@@ -23,6 +26,7 @@ export default class Imovel {
     this.cep = 0;
     this.uf = '';
     this.idUsuario = 0;
+    this.usuario = new Usuario();
     this.situacaoImovel = '';
   }
 }

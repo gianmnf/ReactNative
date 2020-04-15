@@ -10,7 +10,7 @@ export function obterPorIdeUsuario(ideUsuario) {
         '"';
 
       const db = OpenDataBase();
-      db.transaction((tx) => {
+      db.transaction(tx => {
         tx.executeSql(sql, [], (tx, results) => {
           if (results.rows.length === 0) {
             reject('Usuário inexistente');
@@ -35,7 +35,7 @@ export function incluirUsuario(usuario) {
         ' values (?, ?, ?, ?)';
 
       const db = OpenDataBase();
-      db.transaction((tx) => {
+      db.transaction(tx => {
         tx.executeSql(
           sql,
           [
@@ -64,7 +64,7 @@ export function alterarUsuario(usuario) {
         ' where idUsuario = ?';
 
       const db = OpenDataBase();
-      db.transaction((tx) => {
+      db.transaction(tx => {
         tx.executeSql(
           sql,
           [
@@ -94,7 +94,7 @@ export function obterPorEmail(email) {
         '"';
 
       const db = OpenDataBase();
-      db.transaction((tx) => {
+      db.transaction(tx => {
         tx.executeSql(sql, [], (tx, results) => {
           if (results.rows.length === 0) {
             reject('Usuário inexistente');

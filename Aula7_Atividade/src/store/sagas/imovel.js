@@ -21,6 +21,7 @@ function* apresentarMensagem(tipo, user, mensagem) {
 function* incluir(imovel) {
   const retorno = yield incluirImovel(imovel)
     .then(resp => {
+      console.tron.log('Dentro do incluir: ' + resp);
       var ret = {
         tipo: 1,
         mensagem: '',
@@ -42,7 +43,6 @@ function* incluir(imovel) {
 
 /* Função para cadastrar um imóvel */
 export function* manterImovel(action) {
-  console.tron.log(action.house);
   try {
     const {isConnected} = yield NetInfo.fetch();
     if (isConnected) {

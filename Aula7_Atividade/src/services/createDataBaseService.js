@@ -21,12 +21,12 @@ export function CreateDataBaseService() {
       ' DescricaoImovel VARCHAR(200) NOT NULL,' +
       ' Email VARCHAR(200) NOT NULL,' +
       ' LogradouroImovel VARCHAR(200) NOT NULL,' +
-      ' Numero SMALLINT NOT NULL,' +
+      ' Numero INTEGER NOT NULL,' +
       ' Complemento VARCHAR(30),' +
       ' Bairro VARCHAR(50) NOT NULL,' +
       ' CEP INTEGER NOT NULL,' +
       ' UF VARCHAR(2) NOT NULL,' +
-      ' IdUsuario SMALLINT NOT NULL,' +
+      ' IdUsuario INTEGER NOT NULL,' +
       ' SituacaoImovel VARCHAR(1) NOT NULL,' +
       ' FOREIGN KEY(IdUsuario) REFERENCES Usuario(IdUsuario));';
     db.transaction(function(txn) {
