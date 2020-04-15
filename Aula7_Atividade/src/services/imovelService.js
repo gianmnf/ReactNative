@@ -1,5 +1,28 @@
 import {OpenDataBase} from './database.js';
+import Imovel from '../model/imovel';
 
+export function obterPorIdUsuario(idUsuario) {
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `select * from imovel where idUsuario=${idUsuario}`;
+
+      const db = OpenDataBase();
+      db.transaction(tx => {
+        tx.executeSql(sql, [], (tx, results) => {
+          if (results.rows.length === 0) {
+            reject('Este usuário não possui nenhum imóvel cadastrado.');
+          }
+
+          var imovel = montarImovel(results);
+
+          resolve(imovel);
+        });
+      });
+    } catch (err) {
+      reject(err.message);
+    }
+  });
+}
 export function incluirImovel(imovel) {
   console.tron.log(JSON.stringify(imovel, '\n'));
   return new Promise((resolve, reject) => {
@@ -37,4 +60,14 @@ export function incluirImovel(imovel) {
       reject(err.message);
     }
   });
+}
+
+function montarImovel(dado) {
+  let imoveis = [];
+
+  for (let i = 0; i < dado.rows.length; i++) {
+    imoveis[i] = dado.rows.item(i);
+  }
+
+  return imoveis;
 }

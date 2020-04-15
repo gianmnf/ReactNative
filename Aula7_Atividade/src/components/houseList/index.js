@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import AccordionObject from '../../components/accordionObject';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import Styles from './styles';
 
@@ -9,37 +9,40 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 import House from '../house';
 
+import {obterPorIdUsuario} from '../../services/imovelService';
+
 function HouseList() {
-  const [housesList, setHousesList] = useState([]);
+  const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const [imovelList, setImovelList] = useState([]);
 
-  /* useEffect(() => {
-    dispatch({type: 'SET_NAVEGACAO_INICIAR'});
+  useEffect(() => {
     lerImoveis();
-  }, []); */
+  }, []);
 
-  /*  async function lerImoveis() {
-    async () => {
+  async function lerImoveis() {
+    await obterPorIdUsuario(auth.usuario.idUsuario)
+      .then(res => {
+        setImovelList(res);
+        console.tron.log(res);
+      })
+      .catch(err => {
+        console.tron.log(err);
+      });
 
-    };
-  } */
-
-  /* function sortMyArray(contacts) {
-    return contacts.sort((a, b) => {
-      return a.displayName > b.displayName ? 1 : -1;
-    });
-  } */
+    dispatch({type: 'SET_NAVEGACAO_FINALIZAR'});
+  }
 
   return (
     <View style={Styles.containerPerfil}>
       <ScrollView>
-        {housesList.map(house => {
+        {imovelList.map(imovel => {
           return (
             <AccordionObject
-              title={house.descricaoImovel}
-              id={house.idImovel}
-              icone="user-o"
-              children={<House imovel={house} />}
+              title={'Logradouro:' + imovel.LogradouroImovel + ' Número: ' + imovel.Numero + ' Bairro: ' + imovel.Bairro}
+              id={imovel.IdImovel}
+              icone="home"
+              children={<House imovel={imovel} />}
             />
           );
         })}

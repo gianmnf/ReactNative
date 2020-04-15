@@ -6,31 +6,31 @@ import styles from './styles';
 
 import {useDispatch} from 'react-redux';
 
-function Imovel({imovel}) {
+function House({imovel}) {
   const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Nome: {imovel.descricaoImovel}</Text>
       <ScrollView>
-        {imovel.houses.map(house => {
-          return (
-            <View key={house.idImovel} style={styles.containerPhone}>
-              <Text style={styles.texto}>{house.email}</Text>
-              <Text style={styles.texto}>{house.logradouroImovel}</Text>
-              <Text style={styles.texto}>{house.numero}</Text>
-              <Text style={styles.texto}>{house.complemento}</Text>
-              <Text style={styles.texto}>{house.bairro}</Text>
-              <Text style={styles.texto}>{house.cidade}</Text>
-              <Text style={styles.texto}>{house.cep}</Text>
-              <Text style={styles.texto}>{house.uf}</Text>
-              <Text style={styles.texto}>{house.situacaoImovel}</Text>
-            </View>
-          );
-        })}
+        <Text style={styles.texto}>
+          {' '}
+          Descrição do Imóvel: {imovel.DescricaoImovel}
+        </Text>
+        <Text style={styles.texto}> Email: {imovel.Email}</Text>
+        <Text style={styles.texto}> Logradouro: {imovel.LogradouroImovel}</Text>
+        <Text style={styles.texto}> Número: {imovel.Numero}</Text>
+        <Text style={styles.texto}> Complemento: {imovel.Complemento}</Text>
+        <Text style={styles.texto}> Bairro: {imovel.Bairro}</Text>
+        <Text style={styles.texto}> Cidade: {imovel.Cidade}</Text>
+        <Text style={styles.texto}> CEP: {imovel.CEP}</Text>
+        <Text style={styles.texto}> UF: {imovel.UF}</Text>
+        <Text style={styles.texto}>
+          {' '}
+          Situação do Imóvel: {imovel.SituacaoImovel}
+        </Text>
       </ScrollView>
     </View>
   );
 }
 
-export default Imovel;
+export default House;
