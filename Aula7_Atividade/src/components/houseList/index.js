@@ -13,10 +13,10 @@ function HouseList() {
   const [housesList, setHousesList] = useState([]);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  /* useEffect(() => {
     dispatch({type: 'SET_NAVEGACAO_INICIAR'});
-    /* lerImoveis(); */
-  }, []);
+    lerImoveis();
+  }, []); */
 
   /*  async function lerImoveis() {
     async () => {

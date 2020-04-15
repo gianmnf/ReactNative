@@ -18,7 +18,7 @@ import {
 
 import styles from './styles';
 
-function CadastroImovel({navigation}) {
+function CadastroImovel({navigation, tipoManutencaoParametro}) {
   const [descricaoImovel, setDescricaoImovel] = useState('');
   const [email, setEmail] = useState('');
   const [logradouroImovel, setLogradouroImovel] = useState('');
@@ -29,31 +29,67 @@ function CadastroImovel({navigation}) {
   const [cep, setCep] = useState('');
   const [uf, setUf] = useState('');
   const [idUsuario, setIdUsuario] = useState('');
+  const [tipoManutencao, setTipoManutencao] = useState('');
   const [situacaoImovel, setSituacaoImovel] = useState('');
 
   const auth = useSelector(state => state.auth);
+  const authImovel = useSelector(state => state.imovel);
   const dispatch = useDispatch();
+
+  console.tron.log(tipoManutencaoParametro);
 
   useEffect(() => {
     inicializar();
   }, []);
 
+  useEffect(() => {
+    if (authImovel.navegar === true) {
+      navigation.navigate('Main');
+      dispatch({type: 'CADASTRAR_IMOVEL_SUCCESS'});
+    }
+  }, [authImovel.navegar]);
+
   async function inicializar() {
-    setDescricaoImovel('');
-    setEmail('');
-    setLogradouroImovel('');
-    setNumero('');
-    setComplemento('');
-    setBairro('');
-    setCidade('');
-    setCep('');
-    setUf('');
-    setSituacaoImovel('');
+    if (tipoManutencaoParametro !== undefined) {
+      setTipoManutencao(tipoManutencaoParametro);
+    } else {
+      const tipoManutencaoRota = navigation.getParam('tipoManutencaoRota');
+      setTipoManutencao(tipoManutencaoRota);
+    }
+
+    if (tipoManutencaoParametro === undefined) {
+      setDescricaoImovel('');
+      setEmail('');
+      setLogradouroImovel('');
+      setNumero('');
+      setComplemento('');
+      setBairro('');
+      setCidade('');
+      setCep('');
+      setUf('');
+      setSituacaoImovel('');
+    } else {
+      setDescricaoImovel(authImovel.imovel.descricaoImovel);
+      setEmail(authImovel.imovel.email);
+      setLogradouroImovel(authImovel.imovel.logradouroImovel);
+      setNumero(authImovel.imovel.numero);
+      setComplemento(authImovel.imovel.complemento);
+      setBairro(authImovel.imovel.bairro);
+      setCidade(authImovel.imovel.cidade);
+      setCep(authImovel.imovel.cep);
+      setUf(authImovel.imovel.uf);
+      setIdUsuario(auth.usuario.idUsuario);
+      setSituacaoImovel(authImovel.imovel.situacaoImovel);
+    }
   }
 
   function salvar() {
     var house = new Imovel();
-    house.idUsuario = auth.usuario.idUsuario;
+    if (auth.usuario === null) {
+      house.idUsuario = 0;
+    } else {
+      house.idUsuario = auth.usuario.idUsuario;
+    }
     house.usuario = auth.usuario;
     house.descricaoImovel = descricaoImovel;
     house.email = email;
@@ -190,13 +226,13 @@ function CadastroImovel({navigation}) {
         </View>
 
         <View style={styles.containerButton}>
-          {/* {tipoManutencao === 'Inclusao' && ( */}
-          <TouchableOpacity
-            style={styles.buttonCancel}
-            onPress={() => navigation.navigate('Main')}>
-            <Text style={styles.buttonText}>Voltar</Text>
-          </TouchableOpacity>
-          {/* )} */}
+          {tipoManutencao === 'Inclusao' && (
+            <TouchableOpacity
+              style={styles.buttonCancel}
+              onPress={() => navigation.navigate('Main')}>
+              <Text style={styles.buttonText}>Voltar</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity style={styles.button} onPress={() => salvar()}>
             {auth.loading && <ActivityIndicator size="large" color="white" />}
             {!auth.loading && <Text style={styles.buttonText}>Salvar</Text>}

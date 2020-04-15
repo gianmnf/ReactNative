@@ -21,6 +21,7 @@ function Imovel({imovel}) {
               <Text style={styles.texto}>{house.numero}</Text>
               <Text style={styles.texto}>{house.complemento}</Text>
               <Text style={styles.texto}>{house.bairro}</Text>
+              <Text style={styles.texto}>{house.cidade}</Text>
               <Text style={styles.texto}>{house.cep}</Text>
               <Text style={styles.texto}>{house.uf}</Text>
               <Text style={styles.texto}>{house.situacaoImovel}</Text>

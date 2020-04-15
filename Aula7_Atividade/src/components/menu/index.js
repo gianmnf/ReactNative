@@ -72,7 +72,7 @@ function Menu({navigation}) {
         <View
           style={[
             Styles.screenStyle,
-            activeItemKey == 'CadastroImovel'
+            activeItemKey === 'CadastroImovel'
               ? Styles.activeBackgroundColor
               : null,
           ]}>
@@ -80,11 +80,15 @@ function Menu({navigation}) {
           <Text
             style={[
               Styles.screenTextStyle,
-              activeItemKey == 'CadastroImovel'
+              activeItemKey === 'CadastroImovel'
                 ? Styles.selectedTextStyle
                 : null,
             ]}
-            onPress={() => navigateToScreen('CadastroImovel')}>
+            onPress={() =>
+              navigation.navigate('CadastroImovel', {
+                tipoManutencaoRota: 'Inclusao',
+              })
+            }>
             Cadastro de Imóvel
           </Text>
         </View>

@@ -15,7 +15,7 @@ export function CreateDataBaseService() {
       'CREATE UNIQUE INDEX IF NOT EXISTS [IX_IdeUsuario] ON [Usuario] ([IdeUsuario]);';
     const sqlCreateIndexUserEmail =
       'CREATE UNIQUE INDEX IF NOT EXISTS [IX_Email] ON [Usuario] ([EMail]);';
-    const sqlCreateTableImovel =
+      const sqlCreateTableImovel =
       'CREATE TABLE IF NOT EXISTS Imovel (' +
       ' IdImovel INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,' +
       ' DescricaoImovel VARCHAR(200) NOT NULL,' +
@@ -24,6 +24,7 @@ export function CreateDataBaseService() {
       ' Numero INTEGER NOT NULL,' +
       ' Complemento VARCHAR(30),' +
       ' Bairro VARCHAR(50) NOT NULL,' +
+      ' Cidade VARCHAR(50) NOT NULL,' +
       ' CEP INTEGER NOT NULL,' +
       ' UF VARCHAR(2) NOT NULL,' +
       ' IdUsuario INTEGER NOT NULL,' +

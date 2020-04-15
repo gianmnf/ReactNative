@@ -7,11 +7,11 @@ import {incluirImovel} from '../../services/imovelService';
 
 import ImovelActions from '../ducks/imovel';
 
-function* apresentarMensagem(tipo, user, mensagem) {
+function* apresentarMensagem(tipo, house, mensagem) {
   if (tipo === 1) {
     yield put(ToastActionsCreators.displayError(mensagem));
   } else {
-    yield put(ImovelActions.cadastrarImovelRequestSuccess(user));
+    yield put(ImovelActions.cadastrarImovelSuccess(house));
     yield put(ToastActionsCreators.displayInfo(mensagem));
   }
 }

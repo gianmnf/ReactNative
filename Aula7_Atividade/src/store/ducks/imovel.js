@@ -18,6 +18,7 @@ export const INITIAL_STATE = Immutable({
 export const cadastrarImovelRequestReducer = state =>
   state.merge({
     loading: true,
+    login: false,
     navegar: false,
     imovel: null,
   });
