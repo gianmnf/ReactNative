@@ -18,7 +18,9 @@ import {
 
 import styles from './styles';
 
-function CadastroImovel({navigation, tipoManutencaoParametro}) {
+function CadastroImovel({navigation}) {
+  console.tron.log(navigation);
+  const [idImovel, setIdImovel] = useState('');
   const [descricaoImovel, setDescricaoImovel] = useState('');
   const [email, setEmail] = useState('');
   const [logradouroImovel, setLogradouroImovel] = useState('');
@@ -36,8 +38,6 @@ function CadastroImovel({navigation, tipoManutencaoParametro}) {
   const authImovel = useSelector(state => state.imovel);
   const dispatch = useDispatch();
 
-  console.tron.log(tipoManutencaoParametro);
-
   useEffect(() => {
     inicializar();
   }, []);
@@ -50,11 +50,14 @@ function CadastroImovel({navigation, tipoManutencaoParametro}) {
   }, [authImovel.navegar]);
 
   async function inicializar() {
+    var tipoManutencaoParametro = await navigation
+      .dangerouslyGetParent()
+      .getParam('tipoManutencaoParametro');
+    var imovel = await navigation.dangerouslyGetParent().getParam('imovel');
+    console.log(imovel);
+
     if (tipoManutencaoParametro !== undefined) {
       setTipoManutencao(tipoManutencaoParametro);
-    } else {
-      const tipoManutencaoRota = navigation.getParam('tipoManutencaoRota');
-      setTipoManutencao(tipoManutencaoRota);
     }
 
     if (tipoManutencaoParametro === undefined) {
@@ -69,17 +72,18 @@ function CadastroImovel({navigation, tipoManutencaoParametro}) {
       setUf('');
       setSituacaoImovel('');
     } else {
-      setDescricaoImovel(authImovel.imovel.descricaoImovel);
-      setEmail(authImovel.imovel.email);
-      setLogradouroImovel(authImovel.imovel.logradouroImovel);
-      setNumero(authImovel.imovel.numero);
-      setComplemento(authImovel.imovel.complemento);
-      setBairro(authImovel.imovel.bairro);
-      setCidade(authImovel.imovel.cidade);
-      setCep(authImovel.imovel.cep);
-      setUf(authImovel.imovel.uf);
-      setIdUsuario(auth.usuario.idUsuario);
-      setSituacaoImovel(authImovel.imovel.situacaoImovel);
+      setIdImovel(imovel.IdImovel);
+      setDescricaoImovel(imovel.DescricaoImovel);
+      setEmail(imovel.Email);
+      setLogradouroImovel(imovel.LogradouroImovel);
+      setNumero(imovel.Numero);
+      setComplemento(imovel.Complemento);
+      setBairro(imovel.Bairro);
+      setCidade(imovel.Cidade);
+      setCep(imovel.CEP);
+      setUf(imovel.UF);
+      setIdUsuario(imovel.IdUsuario);
+      setSituacaoImovel(imovel.SituacaoImovel);
     }
   }
 
@@ -101,6 +105,10 @@ function CadastroImovel({navigation, tipoManutencaoParametro}) {
     house.cep = parseInt(cep, 10);
     house.uf = uf;
     house.situacaoImovel = situacaoImovel;
+    if (idImovel !== 0) {
+      console.log('Id do Imóvel: ' + idImovel);
+      house.idImovel = idImovel;
+    }
 
     dispatch({type: 'CADASTRAR_IMOVEL_REQUEST', house});
   }

@@ -38,6 +38,12 @@ function Menu({navigation}) {
     navigation.navigate('login');
   }
 
+  function navegarCadastro() {
+    navigation.navigate('CadastroImovel', {
+      tipoManutencaoParametro: 'Inclusao',
+    });
+  }
+
   return (
     <View style={Styles.container}>
       <View style={Styles.headerContainer}>
@@ -84,11 +90,7 @@ function Menu({navigation}) {
                 ? Styles.selectedTextStyle
                 : null,
             ]}
-            onPress={() =>
-              navigation.navigate('CadastroImovel', {
-                tipoManutencaoRota: 'Inclusao',
-              })
-            }>
+            onPress={() => navegarCadastro()}>
             Cadastro de Imóvel
           </Text>
         </View>

@@ -6,11 +6,6 @@ const Styles = StyleSheet.create({
     backgroundColor: Colors.light,
     flex: 1,
   },
-  pesquisaTexto: {
-    color: Colors.dark,
-    textAlign: 'center',
-    fontSize: 20,
-  },
 });
 
 export default Styles;

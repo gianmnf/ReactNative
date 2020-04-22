@@ -1,17 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {View, Text, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+  RefreshControl,
+} from 'react-native';
+
+import {ToastActionsCreators} from 'react-native-redux-toast';
+
+import {put} from 'redux-saga/effects';
 
 import styles from './styles';
 
 import {useDispatch} from 'react-redux';
 
-function House({imovel}) {
+import Dialog, {
+  DialogFooter,
+  DialogButton,
+  DialogContent,
+  DialogTitle,
+} from 'react-native-popup-dialog';
+
+import {deletarImovel} from '../../services/imovelService';
+
+function House({navigation, imovel, id}) {
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState();
+
+  function alterarImovel(imovelAlt) {
+    navigation.navigate('CadastroImovel', {
+      tipoManutencaoParametro: 'Alteracao',
+      imovel,
+    });
+  }
+
+  async function removerImovel(idRemover) {
+    await deletarImovel(idRemover)
+      .then(window.location.reload(true))
+      .catch(window.location.reload(false));
+  }
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView key={imovel.IdImovel}>
         <Text style={styles.texto}>
           {' '}
           Descrição do Imóvel: {imovel.DescricaoImovel}
@@ -28,7 +62,27 @@ function House({imovel}) {
           {' '}
           Situação do Imóvel: {imovel.SituacaoImovel}
         </Text>
+        <Button
+          title="Editar"
+          color="#f0ad4e"
+          onPress={() => alterarImovel(imovel)}
+        />
+        <Button title="Remover" color="red" onPress={() => setVisible(true)} />
       </ScrollView>
+      {/* Dialog para deletar imóvel */}
+      <Dialog
+        visible={visible}
+        dialogTitle={<DialogTitle title="Remoção de Imóvel" />}
+        footer={
+          <DialogFooter>
+            <DialogButton text="NÃO" onPress={() => setVisible(false)} />
+            <DialogButton text="SIM" onPress={() => removerImovel(id)} />
+          </DialogFooter>
+        }>
+        <DialogContent>
+          <Text>Deseja remover este imóvel?</Text>
+        </DialogContent>
+      </Dialog>
     </View>
   );
 }

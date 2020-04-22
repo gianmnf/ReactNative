@@ -14,6 +14,7 @@ import Ajuda from '../pages/ajuda';
 import Sair from '../pages/sair';
 import CadastroUsuario from '../pages/cadastroUsuario';
 import CadastroImovel from '../pages/cadastroImovel';
+import HouseList from '../components/houseList';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -44,6 +45,22 @@ const CadastroImovelPage = createStackNavigator({
     screen: CadastroImovel,
     navigationOptions: ({navigation}) => ({
       title: 'Cad',
+      headerLeft: () => (
+        <NavigationDrawerStructure navigationProps={navigation} />
+      ),
+      headerStyle: {
+        backgroundColor: Colors.fundo,
+      },
+      headerTintColor: Colors.fundo,
+    }),
+  },
+});
+
+const HouseListPage = createStackNavigator({
+  House: {
+    screen: HouseList,
+    navigationOptions: ({navigation}) => ({
+      title: 'Pesquisa',
       headerLeft: () => (
         <NavigationDrawerStructure navigationProps={navigation} />
       ),
@@ -195,6 +212,7 @@ const DrawerNavigatorMenu = createDrawerNavigator(
     CadastroImovel: CadastroImovelPage,
     Sair: SairPage,
     Hidden: HiddenPage,
+    HouseList: HouseListPage,
   },
   {
     contentComponent: Menu,

@@ -44,7 +44,7 @@ function Main({navigation, isFocused}) {
   }
 
   if (tab === 1) {
-    return <HouseList />;
+    return <HouseList navigation={navigation} />;
   }
   if (tab === 2) {
     return <CadastroUsuario tipoManutencaoParametro="Alteracao" />;

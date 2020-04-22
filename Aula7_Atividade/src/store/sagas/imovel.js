@@ -3,7 +3,11 @@ import NetInfo from '@react-native-community/netinfo';
 import {ToastActionsCreators} from 'react-native-redux-toast';
 import {ValidarEmail} from '../../utils/validarEmail';
 
-import {incluirImovel} from '../../services/imovelService';
+import {
+  incluirImovel,
+  alterarImovel,
+  obterPorDescricao,
+} from '../../services/imovelService';
 
 import ImovelActions from '../ducks/imovel';
 
@@ -16,12 +20,58 @@ function* apresentarMensagem(tipo, house, mensagem) {
   }
 }
 
+/* Função para pesquisar o imóvel a partir da descrição */
+
+function* pesquisarImovelPorDescricao(descricao) {
+  const retorno = yield obterPorDescricao(descricao)
+    .then(resp => {
+      var ret = {
+        tipo: 1,
+        mensagem: '',
+        imovel: resp,
+      };
+      return ret;
+    })
+    .catch(erro => {
+      var ret = {
+        tipo: 2,
+        mensagem: erro,
+        imovel: null,
+      };
+      return ret;
+    });
+  return retorno;
+}
+
 /* Função para incluir um imóvel */
 
 function* incluir(imovel) {
   const retorno = yield incluirImovel(imovel)
     .then(resp => {
-      console.tron.log('Dentro do incluir: ' + resp);
+      var ret = {
+        tipo: 1,
+        mensagem: '',
+        imovel: resp,
+      };
+
+      return ret;
+    })
+    .catch(erro => {
+      var ret = {
+        tipo: 2,
+        mensagem: erro,
+        imovel: null,
+      };
+      return ret;
+    });
+  return retorno;
+}
+
+/* Função para alterar um imóvel  */
+
+function* alterar(imovel) {
+  const retorno = yield alterarImovel(imovel)
+    .then(resp => {
       var ret = {
         tipo: 1,
         mensagem: '',
@@ -43,6 +93,7 @@ function* incluir(imovel) {
 
 /* Função para cadastrar um imóvel */
 export function* manterImovel(action) {
+  console.log('Manter Imóvel: ' + JSON.stringify(action));
   try {
     const {isConnected} = yield NetInfo.fetch();
     if (isConnected) {
@@ -51,12 +102,24 @@ export function* manterImovel(action) {
         yield apresentarMensagem(1, action.house, mensagemErro);
         return;
       }
+
+      // Pesquisar se existe um imóvel com esta descrição
+      var retorno = yield pesquisarImovelPorDescricao(
+        action.house.descricaoImovel,
+      );
+
+      if (
+        retorno.tipo === 1 &&
+        retorno.house.idImovel !== action.house.idImovel
+      ) {
+        yield apresentarMensagem(1, action.house, 'Imóvel já existente');
+        return;
+      }
+
       if (action.house.idImovel === 0) {
-        console.tron.log('Chegou Aqui');
         ToastActionsCreators.displayInfo('Incluindo Imóvel');
         var retorno = yield incluir(action.house);
         if (retorno.tipo === 1) {
-          console.tron.log('Chegou no if');
           yield apresentarMensagem(
             2,
             retorno.imovel,
@@ -64,17 +127,28 @@ export function* manterImovel(action) {
           );
           return;
         } else {
-          console.tron.log('Chegou no else');
-          yield apresentarMensagem(1, action.user, retorno.mensagem);
+          yield apresentarMensagem(1, action.house, retorno.mensagem);
+          return;
+        }
+      } else {
+        ToastActionsCreators.displayInfo('Atualizando Imóvel');
+        var retorno = yield alterar(action.house);
+        if (retorno.tipo === 1) {
+          yield apresentarMensagem(
+            2,
+            retorno.imovel,
+            'Alteração efetuada com sucesso',
+          );
+          return;
+        } else {
+          yield apresentarMensagem(1, action.house, retorno.mensagem);
           return;
         }
       }
     } else {
-      console.tron.log('Chegou no else 2');
       yield apresentarMensagem(1, action.house, 'Sem conexão com internet');
     }
   } catch (err) {
-    console.tron.log('Chegou no catch');
     yield apresentarMensagem(1, action.house, err.message);
     return;
   }

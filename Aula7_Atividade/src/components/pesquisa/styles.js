@@ -20,7 +20,8 @@ const Styles = StyleSheet.create({
     flex: 1,
   },
   btn: {
-    color: Colors.vermelho,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
