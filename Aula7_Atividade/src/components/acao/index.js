@@ -25,26 +25,23 @@ function Acao({navigation}) {
   const [visible, setVisible] = useState(false);
   const [valorPesquisa, setValorPesquisa] = useState('');
 
-  /* function acao1() {
+  function acao1() {
     var objeto = {
       id: 1,
       nome: 'teste',
     };
     navigation.navigate('Detalhar', {objeto});
-  } */
+  }
 
-  function abrirBusca() {
+  async function abrirBusca() {
+    setValorPesquisa('');
     setVisible(true);
   }
 
   function pesquisar(valor) {
-    console.log(
-      'Navigate resultado: ' +
-        navigation.navigate('HouseList', {
-          pesquisa: valor,
-        }),
-    );
-    setValorPesquisa('');
+    navigation.navigate('HouseList', {
+      pesquisa: valor,
+    });
     setVisible(false);
   }
   return (

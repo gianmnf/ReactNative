@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import AccordionObject from '../../components/accordionObject';
 import {View, Text, Button} from 'react-native';
-import {withNavigation} from 'react-navigation';
 
 import Styles from './styles';
 
@@ -15,15 +15,12 @@ import {obterPorIdUsuario, obterPesquisa} from '../../services/imovelService';
 function HouseList({navigation}) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const imovelState = useSelector(state => state.imovel);
   const [imovelList, setImovelList] = useState([]);
-  const parametro = navigation.dangerouslyGetParent().getParam('pesquisa');
-
-  useEffect(() => {
-    lerImoveis();
-  }, []);
+  const [parametro, setParametro] = useState('');
 
   async function lerImoveis() {
-    console.log('Parametro chegando ' + parametro);
+    setParametro(await navigation.dangerouslyGetParent().getParam('pesquisa'));
     if (parametro === undefined) {
       await obterPorIdUsuario(auth.usuario.idUsuario)
         .then(res => {
@@ -46,10 +43,21 @@ function HouseList({navigation}) {
     dispatch({type: 'SET_NAVEGACAO_FINALIZAR'});
   }
 
+  useEffect(() => {
+    lerImoveis();
+  }, [imovelState.imovel]);
+
+  useEffect(() => {
+    lerImoveis();
+  }, [imovelState.modificado]);
+
+  function voltar() {
+    navigation.navigate('Main');
+  }
+
   return (
     <View style={Styles.containerPerfil}>
       <ScrollView>
-        {/* Função para verificar se estou pesquisando ou não - será implementado assim que o parametro parar de vir incorreto */}
         {parametro !== undefined ? (
           <Text h1 style={Styles.pesquisaTexto}>
             Resultados da Pesquisa
@@ -79,11 +87,7 @@ function HouseList({navigation}) {
           );
         })}
         {parametro !== undefined ? (
-          <Button
-            title="Voltar"
-            color="#00ccff"
-            onPress={() => navigation.navigate('Main')}
-          />
+          <Button title="Voltar" color="#00ccff" onPress={() => voltar()} />
         ) : null}
       </ScrollView>
     </View>

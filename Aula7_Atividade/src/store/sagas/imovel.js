@@ -7,6 +7,7 @@ import {
   incluirImovel,
   alterarImovel,
   obterPorDescricao,
+  deletarImovel,
 } from '../../services/imovelService';
 
 import ImovelActions from '../ducks/imovel';
@@ -16,6 +17,15 @@ function* apresentarMensagem(tipo, house, mensagem) {
     yield put(ToastActionsCreators.displayError(mensagem));
   } else {
     yield put(ImovelActions.cadastrarImovelSuccess(house));
+    yield put(ToastActionsCreators.displayInfo(mensagem));
+  }
+}
+
+function* apresentarMensagemDelete(tipo, mensagem) {
+  if (tipo === 1) {
+    yield put(ToastActionsCreators.displayError(mensagem));
+  } else {
+    yield put(ImovelActions.deletarImovelSuccess());
     yield put(ToastActionsCreators.displayInfo(mensagem));
   }
 }
@@ -85,6 +95,42 @@ function* alterar(imovel) {
         tipo: 2,
         mensagem: erro,
         imovel: null,
+      };
+      return ret;
+    });
+  return retorno;
+}
+
+export function* excluirImovel(action) {
+  try {
+    var retorno = yield exclusaoImovel(action.idRemover);
+
+    if (retorno.tipo === 1) {
+      yield apresentarMensagemDelete(2, 'Imóvel removido com sucesso!');
+      return;
+    } else {
+      yield apresentarMensagemDelete(1, 'Não foi possível remover o imóvel');
+      return;
+    }
+  } catch (err) {
+    yield apresentarMensagemDelete(1, err.message);
+    return;
+  }
+}
+
+function* exclusaoImovel(idImovel) {
+  const retorno = yield deletarImovel(idImovel)
+    .then(res => {
+      var ret = {
+        tipo: 1,
+        mensagem: '',
+      };
+      return ret;
+    })
+    .catch(err => {
+      var ret = {
+        tipo: 1,
+        mensagem: err,
       };
       return ret;
     });

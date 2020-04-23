@@ -2,7 +2,7 @@ import {all, takeLatest, take} from 'redux-saga/effects';
 
 // Importar os métodos
 import {login, manterUsuario} from './auth';
-import {manterImovel} from './imovel';
+import {manterImovel, excluirImovel} from './imovel';
 import {apresentarMensagem} from './mensagem';
 
 // Importar os types
@@ -15,6 +15,7 @@ export default function* rootSaga() {
     takeLatest(AuthTypes.SIGN_IN_REQUEST, login),
     takeLatest(AuthTypes.CADASTRAR_USUARIO_REQUEST, manterUsuario),
     takeLatest(ImovelTypes.CADASTRAR_IMOVEL_REQUEST, manterImovel),
+    takeLatest(ImovelTypes.DELETAR_IMOVEL_REQUEST, excluirImovel),
     takeLatest(MensagemTypes.SET_MENSAGEM, apresentarMensagem),
   ]);
 }

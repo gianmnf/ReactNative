@@ -20,7 +20,7 @@ import styles from './styles';
 
 function CadastroImovel({navigation}) {
   console.tron.log(navigation);
-  const [idImovel, setIdImovel] = useState('');
+  const [idImovel, setIdImovel] = useState(0);
   const [descricaoImovel, setDescricaoImovel] = useState('');
   const [email, setEmail] = useState('');
   const [logradouroImovel, setLogradouroImovel] = useState('');
@@ -42,10 +42,24 @@ function CadastroImovel({navigation}) {
     inicializar();
   }, []);
 
+  function limparCampos() {
+    setDescricaoImovel('');
+    setEmail('');
+    setLogradouroImovel('');
+    setNumero('');
+    setComplemento('');
+    setBairro('');
+    setCidade('');
+    setCep('');
+    setUf('');
+    setSituacaoImovel('');
+  }
+
   useEffect(() => {
     if (authImovel.navegar === true) {
       navigation.navigate('Main');
       dispatch({type: 'CADASTRAR_IMOVEL_SUCCESS'});
+      limparCampos();
     }
   }, [authImovel.navegar]);
 
@@ -60,27 +74,19 @@ function CadastroImovel({navigation}) {
       setTipoManutencao(tipoManutencaoParametro);
     }
 
-    if (tipoManutencaoParametro === undefined) {
-      setDescricaoImovel('');
-      setEmail('');
-      setLogradouroImovel('');
-      setNumero('');
-      setComplemento('');
-      setBairro('');
-      setCidade('');
-      setCep('');
-      setUf('');
-      setSituacaoImovel('');
-    } else {
+    if (tipoManutencao === 'Inclusao') {
+      setIdImovel(0);
+      limparCampos();
+    } else if (imovel !== undefined) {
       setIdImovel(imovel.IdImovel);
       setDescricaoImovel(imovel.DescricaoImovel);
       setEmail(imovel.Email);
       setLogradouroImovel(imovel.LogradouroImovel);
-      setNumero(imovel.Numero);
+      setNumero(imovel.Numero.toString());
       setComplemento(imovel.Complemento);
       setBairro(imovel.Bairro);
       setCidade(imovel.Cidade);
-      setCep(imovel.CEP);
+      setCep(imovel.CEP.toString());
       setUf(imovel.UF);
       setIdUsuario(imovel.IdUsuario);
       setSituacaoImovel(imovel.SituacaoImovel);
@@ -94,6 +100,7 @@ function CadastroImovel({navigation}) {
     } else {
       house.idUsuario = auth.usuario.idUsuario;
     }
+    house.idImovel = idImovel;
     house.usuario = auth.usuario;
     house.descricaoImovel = descricaoImovel;
     house.email = email;

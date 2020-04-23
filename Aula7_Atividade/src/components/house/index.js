@@ -37,10 +37,9 @@ function House({navigation, imovel, id}) {
     });
   }
 
-  async function removerImovel(idRemover) {
-    await deletarImovel(idRemover)
-      .then(window.location.reload(true))
-      .catch(window.location.reload(false));
+  function removerImovel(idRemover) {
+    setVisible(false);
+    dispatch({type: 'DELETAR_IMOVEL_REQUEST', idRemover});
   }
 
   return (
