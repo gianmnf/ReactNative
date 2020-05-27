@@ -10,6 +10,8 @@ routes.get("/usuario", usuarioController.index);
 routes.post("/usuario", usuarioController.store);
 routes.post("/usuario/autenticar",usuarioController.findByIdeUsuarioSenha);
 
+routes.get("/imovel", imovelController.findAll);
+
 routes.use(authMiddlesware);
 
 routes.put("/usuario/:id", usuarioController.update);

@@ -21,6 +21,16 @@ class ImovelController {
     return res.json(imovel);
   }
 
+  async findAll(req, res) {
+    const imovel = await Imovel.find();
+
+    if (!imovel) {
+      return res.status(400).json({ error: "Não existem imóveis" });
+    }
+
+    return res.json(imovel);
+  }
+
   async update(req, res) {
     const imovel = await Imovel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
