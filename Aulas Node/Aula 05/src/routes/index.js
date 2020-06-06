@@ -10,7 +10,6 @@ routes.get("/usuario", usuarioController.index);
 routes.post("/usuario", usuarioController.store);
 routes.post("/usuario/autenticar",usuarioController.findByIdeUsuarioSenha);
 
-routes.get("/imovel", imovelController.findAll);
 
 routes.use(authMiddlesware);
 
@@ -22,5 +21,7 @@ routes.post("/imovel", imovelController.store);
 routes.get("/imovel/obter/:id", imovelController.findById);
 routes.put("/imovel/:id", imovelController.update);
 routes.delete("/imovel/:id", imovelController.delete);
+routes.get("/imovel/findAll", imovelController.find);
+routes.get("/imovel/findPaginate", imovelController.findPage);
 
 module.exports = routes;

@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const authConfig = require("../config/auth");
+const mongoosePaginate = require("mongoose-paginate");
 
 const Schema = mongoose.Schema;
 let ImovelSchema = new Schema({
@@ -22,8 +20,7 @@ let ImovelSchema = new Schema({
   },
   Numero: {
     type: Number,
-    required: true,
-    max: 9999,
+    required: true
   },
   Complemento: {
     type: String,
@@ -61,6 +58,7 @@ let ImovelSchema = new Schema({
   },
 });
 
+ImovelSchema.plugin(mongoosePaginate);
 
 // Exportar o modelo
 module.exports = mongoose.model("Imovel", ImovelSchema);

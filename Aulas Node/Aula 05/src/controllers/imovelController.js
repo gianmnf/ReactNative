@@ -12,7 +12,7 @@ class ImovelController {
   }
 
   async findById(req, res) {
-    const imovel = await Imovel.findById(req.params.id);
+    const imovel = await Imovel.findById(req.params.id).populate("Usuario");
 
     if (!imovel) {
       return res.status(400).json({ error: "Id inexistente" });
@@ -21,14 +21,39 @@ class ImovelController {
     return res.json(imovel);
   }
 
-  async findAll(req, res) {
-    const imovel = await Imovel.find();
+  async find(req, res) {
+    const imoveis = await Imovel.find({ Usuario: req.userId }).populate(
+      "Usuario"
+    );
 
-    if (!imovel) {
+    if (!imoveis) {
       return res.status(400).json({ error: "Não existem imóveis" });
     }
 
-    return res.json(imovel);
+    return res.json(imoveis);
+  }
+
+  async findPage(req, res) {
+    try {
+      const filters = {};
+
+      filters.Usuario = req.userId;
+
+      if (req.query.DescricaoImovel) {
+        filters.DescricaoImovel = new RegExp(req.query.DescricaoImovel, "i");
+      }
+
+      const imoveis = await Imovel.paginate(filters, {
+        page: req.query.page || 1,
+        limit: 2,
+        populate: ["Usuario"],
+        sort: "-createdAt",
+      });
+
+      return res.json(imoveis);
+    } catch (err) {
+      return res.status(400).send(err);
+    }
   }
 
   async update(req, res) {

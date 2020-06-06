@@ -6,7 +6,7 @@ class UsuarioController {
   }
 
   async store(req, res) {
-    console.log(req.body);
+    console.log('O meu body:',req.body);
     const usuario = await Usuario.create({ ...req.body });
     return res.json(usuario);
   }
@@ -24,7 +24,11 @@ class UsuarioController {
   async findByIdeUsuarioSenha(req, res) {
     const { IdeUsuario, SenhaUsuario } = req.body;
 
+    console.log('O que estou recebendo: ', req.body.IdeUsuario);
+
     const usuario = await Usuario.findOne({ IdeUsuario: IdeUsuario });
+
+    console.log('Usuario', usuario);
 
     if (!usuario) {
       return res.status(400).json({ error: "Usuário1 ou senha inválido" });
@@ -38,11 +42,24 @@ class UsuarioController {
     return res.json({usuario, token: Usuario.generationToken(usuario) });
   }
 
-  async update(req, res) {
-    const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    return res.json(usuario);
-  }
+  async update(req, res) {
+    // const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
+    const usuario = await Usuario.findOne({ _id: req.params.id }, function (
+      err,
+      doc
+    ) {
+      doc.SenhaUsuario = req.body.SenhaUsuario;
+      doc.NomeUsuario = req.body.NomeUsuario;
+      doc.IdeUsuario = req.body.IdeUsuario;
+      doc.EMail = req.body.EMail;
+      doc.save();
+      return doc;
+    });
+
+    return res.json(usuario);
+  }
 }
 module.exports = new UsuarioController();
