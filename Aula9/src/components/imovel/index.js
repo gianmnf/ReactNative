@@ -57,25 +57,22 @@ function Imovel({navigation, imovelParametro}) {
             <Text style={styles.buttonText}>Excluir</Text>
           </TouchableOpacity>
         </View>
+        <Text style={styles.texto}>Cidade: {imovelParametro.Cidade}</Text>
+        <Text style={styles.texto}>UF: {imovelParametro.Uf}</Text>
         <Text style={styles.texto}>
-          Situação do Imóvel: {imovel.SituacaoImovel}
+          Logradouro: {imovelParametro.Logradouro}
         </Text>
-        <Text style={styles.texto}>Cidade: {imovelParametro.cidade}</Text>
-        <Text style={styles.texto}>UF: {imovelParametro.uf}</Text>
-        <Text style={styles.texto}>
-          Logradouro: {imovelParametro.logradouroImovel}
-        </Text>
-        <Text style={styles.texto}>Numero: {imovelParametro.numero}</Text>
-        <Text style={styles.texto}>Bairro: {imovelParametro.bairro}</Text>
+        <Text style={styles.texto}>Numero: {imovelParametro.Numero}</Text>
+        <Text style={styles.texto}>Bairro: {imovelParametro.Bairro}</Text>
         {imovelParametro.Complemento != '' && (
           <Text style={styles.texto}>
-            Complemento: {imovelParametro.complemento}
+            Complemento: {imovelParametro.Complemento}
           </Text>
         )}
-        <Text style={styles.texto}>CEP: {imovelParametro.cep}</Text>
-        <Text style={styles.texto}>Email: {imovelParametro.email}</Text>
+        <Text style={styles.texto}>CEP: {imovelParametro.Cep}</Text>
+        <Text style={styles.texto}>Email: {imovelParametro.EMail}</Text>
         <Text style={styles.texto}>
-          Descrição: {imovelParametro.descricaoImovel}
+          Descrição: {imovelParametro.DescricaoImovel}
         </Text>
       </ScrollView>
 

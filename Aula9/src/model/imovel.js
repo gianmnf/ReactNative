@@ -1,29 +1,27 @@
 export default class Imovel {
-  idImovel: number;
   descricaoImovel: string;
   email: string;
-  logradouroImovel: string;
+  logradouro: string;
   numero: number;
   complemento: string;
   cep: string;
   bairro: string;
   cidade: string;
   uf: string;
-  idUsuario: number;
+  usuario: String;
   situacaoImovel: string;
 
   constructor() {
-    this.idImovel = 0;
     this.descricaoImovel = '';
     this.email = '';
-    this.logradouroImovel = '';
+    this.logradouro = '';
     this.numero = 0;
     this.complemento = '';
     this.cep = '';
     this.bairro = '';
     this.cidade = '';
     this.uf = '';
-    this.idUsuario = 0;
+    this.usuario = '';
     this.situacaoImovel = '';
   }
 }

@@ -60,7 +60,6 @@ export const alterarImovelRequestReducer = state =>
   });
 
 export const registerInFailureReducer = state => {
-  console.tron.log('Dentro do registrer');
   return state.merge({
     loading: false,
     atualizado: 'N',
@@ -74,8 +73,7 @@ export const registerInSuccessReducer = state =>
   });
 
 export const registerInSuccessPesquisaReducer = (state, {imovel}) => {
-  console.tron.log('Dentro do ducs');
-  console.tron.log(imovel);
+  console.tron.log('Register: ', imovel);
   return state.merge({
     loading: false,
     atualizado: 'L',

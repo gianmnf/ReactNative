@@ -7,8 +7,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import {post, putAxios} from '../../services/api';
 
-import {Verificar} from '../../utils/id';
-
 // import {
 //   obterPorIdeUsuario,
 //   incluirUsuario,

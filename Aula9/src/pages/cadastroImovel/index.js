@@ -21,17 +21,18 @@ import {
 import styles from './styles';
 
 function CadastroImovel({navigation}) {
+  const [_id, setID] = useState('');
   const [descricaoImovel, setDescricaoImovel] = useState('');
   const [email, setEmail] = useState('');
   const [numero, setNumero] = useState('');
-  const [logradouroImovel, setLogradouroImovel] = useState('');
+  const [logradouro, setLogradouro] = useState('');
   const [complemento, setComplemento] = useState('');
   const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
   const [cep, setCep] = useState('');
   const [uf, setUf] = useState('');
-  const [idImovel, setidImovel] = useState('');
-  const [idUsuario, setIdUsuario] = useState(0);
+  const [usuario, setUsuario] = useState('');
+  const [operacao, setOperacao] = useState('');
 
   const auth = useSelector(state => state.auth);
   const imovel = useSelector(state => state.imovel);
@@ -58,38 +59,41 @@ function CadastroImovel({navigation}) {
   }, [imovel]);
 
   function inicializar() {
-    setIdUsuario(auth.usuario.idUsuario);
+    setUsuario(auth.usuario._id);
 
     const tipoManutencao = navigation
       .dangerouslyGetParent()
       .getParam('tipoManutencaoParametro');
     const imovel = navigation.dangerouslyGetParent().getParam('imovel');
 
+    if (tipoManutencao === undefined) {
+      setOperacao('C');
+    }
+
     if (tipoManutencao === 'Alteracao') {
-      setDescricaoImovel(imovel.descricaoImovel);
-      setEmail(imovel.email);
-      setLogradouroImovel(imovel.logradouroImovel);
-      setComplemento(imovel.complemento);
-      setBairro(imovel.bairro);
-      setCidade(imovel.cidade);
-      setCep(imovel.cep);
-      setUf(imovel.uf);
-      setidImovel(imovel.idImovel.toString());
-      setNumero(imovel.numero.toString());
-    } else {
-      setidImovel(0);
+      setDescricaoImovel(imovel.DescricaoImovel);
+      setEmail(imovel.EMail);
+      setLogradouro(imovel.Logradouro);
+      setComplemento(imovel.Complemento);
+      setBairro(imovel.Bairro);
+      setCidade(imovel.Cidade);
+      setCep(imovel.Cep);
+      setUf(imovel.Uf);
+      setID(imovel._id);
+      setNumero(imovel.Numero);
+      setOperacao('A');
     }
   }
 
   function salvar() {
     var imovel = new Imovel();
 
-    imovel.idUsuario = idUsuario;
-    imovel.idImovel = idImovel;
+    imovel.usuario = usuario;
+    imovel._id = _id;
     imovel.descricaoImovel = descricaoImovel;
     imovel.email = email;
     imovel.numero = numero;
-    imovel.logradouroImovel = logradouroImovel;
+    imovel.logradouro = logradouro;
     imovel.complemento = complemento;
     imovel.bairro = bairro;
     imovel.cidade = cidade;
@@ -97,7 +101,7 @@ function CadastroImovel({navigation}) {
     imovel.uf = uf;
     imovel.situacaoImovel = 'A';
 
-    dispatch({type: 'CADASTRAR_IMOVEL_REQUEST', imovel});
+    dispatch({type: 'CADASTRAR_IMOVEL_REQUEST', imovel, operacao});
   }
 
   const consultaCEP = async () => {
@@ -105,7 +109,7 @@ function CadastroImovel({navigation}) {
     await axios
       .get(url)
       .then(res => {
-        setLogradouroImovel(res.data.logradouro);
+        setLogradouro(res.data.logradouro);
         setComplemento(res.data.complemento);
         setBairro(res.data.bairro);
         setCidade(res.data.localidade);
@@ -117,6 +121,7 @@ function CadastroImovel({navigation}) {
           tipo: 1,
           texto: 'CEP inválido',
         };
+        console.tron.log(err);
         dispatch({type: 'SET_MENSAGEM', mensagem});
       });
   };
@@ -183,9 +188,9 @@ function CadastroImovel({navigation}) {
               placeholder="Digite o Logradouro do Imóvel"
               autoCapitalize="none"
               autoCorrect={false}
-              value={logradouroImovel}
+              value={logradouro}
               editable={false}
-              onChangeText={text => setLogradouroImovel(text)}
+              onChangeText={text => setLogradouro(text)}
             />
           </View>
 

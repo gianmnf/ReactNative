@@ -19,7 +19,6 @@ function Pesquisar({navigation}) {
 
   function listarImoveis() {
     var action = {
-      idUsuario: auth.usuario.idUsuario,
       descricaoImovel: descricaoImovel,
     };
 

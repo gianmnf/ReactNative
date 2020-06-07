@@ -11,13 +11,13 @@ import Imovel from '../imovel';
 
 function ImovelList({navigation}) {
   const [imovelList, setImovelList] = useState([]);
+  const [imovelListPesquisa, setImovelListPesquisa] = useState([]);
   const dispatch = useDispatch();
 
   const auth = useSelector(state => state.auth);
   const imovel = useSelector(state => state.imovel);
-  console.tron.log('Imóvel', imovel);
+
   useEffect(() => {
-    console.tron.log('Dentro do Listar Imoveis');
     lerImoveis();
   }, []);
 
@@ -27,13 +27,17 @@ function ImovelList({navigation}) {
       dispatch({type: 'INICIALIZAR_IMOVEL_REQUEST'});
     }
     if (imovel.atualizado === 'L') {
-      setImovelList(imovel.imoveis);
+      if (imovel.imoveis.imovelList.length === undefined) {
+        setImovelList(imovel.imoveis.imovelList.docs);
+      } else {
+        setImovelList(imovel.imoveis.imovelList);
+      }
       dispatch({type: 'INICIALIZAR_IMOVEL_REQUEST'});
     }
   }, [imovel.atualizado]);
 
   function lerImoveis() {
-    dispatch({type: 'PESQUISAR_IMOVEL_REQUEST'});
+    dispatch({type: 'PESQUISAR_IMOVEL_REQUEST', imovel: ''});
   }
 
   return (
@@ -43,11 +47,11 @@ function ImovelList({navigation}) {
           return (
             <AccordionObject
               title={
-                imovelData.descricaoImovel +
+                imovelData.DescricaoImovel +
                 ' Nº ' +
-                imovelData.numero +
+                imovelData.Numero +
                 ', ' +
-                imovelData.cidade
+                imovelData.Cidade
               }
               id={imovelData._id}
               icone="home"

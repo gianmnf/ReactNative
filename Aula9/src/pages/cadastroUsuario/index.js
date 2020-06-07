@@ -17,6 +17,7 @@ import {
 import styles from './styles';
 
 function CadastroUsuario({navigation, tipoManutencaoParametro}) {
+  const [_id, setID] = useState('');
   const [ideUsuario, setIdeUsuario] = useState('');
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [email, setEmail] = useState('');
@@ -36,7 +37,6 @@ function CadastroUsuario({navigation, tipoManutencaoParametro}) {
   }, []);
 
   useEffect(() => {
-    console.tron.log(tipoManutencao);
     if (auth.navegar === true && tipoManutencao === 'Inclusao') {
       navigation.navigate('Main');
       dispatch({type: 'SIGN_IN_INICIAL'});
@@ -44,6 +44,7 @@ function CadastroUsuario({navigation, tipoManutencaoParametro}) {
   }, [auth.navegar]);
 
   async function inicializar() {
+    console.tron.log('Meu AUTH: ', auth);
     if (tipoManutencaoParametro !== undefined) {
       setTipoManutencao(tipoManutencaoParametro);
     } else {
@@ -52,15 +53,16 @@ function CadastroUsuario({navigation, tipoManutencaoParametro}) {
     }
 
     if (tipoManutencaoParametro === undefined) {
-      setIdeUsuario(auth.ideUsuario);
-      setSenha(auth.senhaUsuario);
+      setIdeUsuario(auth.usuario.IdeUsuario);
+      setSenha(auth.usuario.SenhaUsuario);
       setNomeUsuario('');
       setEmail('');
+      setID(auth.usuario._id);
     } else {
-      setIdeUsuario(auth.usuario.ideUsuario);
-      setSenha(auth.usuario.senhaUsuario);
-      setEmail(auth.usuario.email);
-      setNomeUsuario(auth.usuario.nomeUsuario);
+      setID(auth.usuario._id);
+      setIdeUsuario(auth.usuario.IdeUsuario);
+      setEmail(auth.usuario.EMail);
+      setNomeUsuario(auth.usuario.NomeUsuario);
     }
   }
 
@@ -75,11 +77,13 @@ function CadastroUsuario({navigation, tipoManutencaoParametro}) {
   function salvar() {
     var user = new Usuario();
     var tipo = '';
+    user._id = _id;
     user.nomeUsuario = nomeUsuario;
     user.ideUsuario = ideUsuario;
     user.senhaUsuario = senha;
     user.email = email;
 
+    console.tron.log('auth', auth);
     if (tipoManutencao === 'Alteracao') {
       tipo = 'A';
     } else if (tipoManutencao === 'Inclusao') {

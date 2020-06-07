@@ -28,6 +28,10 @@ function Main({navigation, isFocused}) {
 
   const dispatch = useDispatch();
 
+  const isPesquisa = navigation.dangerouslyGetParent().getParam('pesq');
+
+  console.tron.log('Is Pesquisa main: ', isPesquisa);
+
   useEffect(() => {
     if (isFocused) {
       telas[`${navigation.state.routeName}`]();
@@ -45,11 +49,12 @@ function Main({navigation, isFocused}) {
   }
 
   if (tab === 1) {
-    return <Text>OK</Text>;
-    // return <ImovelList navigation={navigation} />;
+    return <ImovelList navigation={navigation} />;
   }
   if (tab === 2) {
-    return <CadastroUsuario tipoManutencaoParametro="Alteracao" />;
+    return (
+      <CadastroUsuario tipoManutencaoParametro="Alteracao" pesq={isPesquisa} />
+    );
   }
   if (tab === 3) {
     return <ContactList />;

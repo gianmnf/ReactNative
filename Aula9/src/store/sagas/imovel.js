@@ -35,6 +35,72 @@ function* incluir(imovel) {
   return retorno;
 }
 
+function incluirImovel(imovel) {
+  const data = {
+    DescricaoImovel: imovel.descricaoImovel,
+    EMail: imovel.email,
+    Logradouro: imovel.logradouro,
+    Numero: imovel.numero,
+    Complemento: imovel.complemento,
+    Cep: imovel.cep,
+    Bairro: imovel.bairro,
+    Cidade: imovel.cidade,
+    Uf: imovel.uf,
+    Usuario: imovel.usuario,
+    SituacaoImovel: imovel.situacaoImovel,
+  };
+
+  return new Promise((resolve, reject) => {
+    post('/imovel', 'COM_TOKEN_USUARIO', data, 'S')
+      .then(response => {
+        console.tron.log('Minha response: ', response);
+        var retorno = {
+          tipo: '1',
+          imovel: response.data.imovel,
+          token: response.data.token,
+        };
+        console.tron.log('Isso é o que recebo: ', retorno);
+        resolve(retorno);
+      })
+      .catch(error => {
+        reject(error.response.data.error);
+      });
+  });
+}
+
+function alterarImovel(imovel) {
+  const data = {
+    DescricaoImovel: imovel.descricaoImovel,
+    EMail: imovel.email,
+    Logradouro: imovel.logradouro,
+    Numero: imovel.numero,
+    Complemento: imovel.complemento,
+    Cep: imovel.cep,
+    Bairro: imovel.bairro,
+    Cidade: imovel.cidade,
+    Uf: imovel.uf,
+    Usuario: imovel.usuario,
+    SituacaoImovel: imovel.situacaoImovel,
+  };
+
+  return new Promise((resolve, reject) => {
+    putAxios(`/imovel/${imovel._id}`, 'COM_TOKEN_USUARIO', data, 'S')
+      .then(response => {
+        console.tron.log('Minha response: ', response);
+        var retorno = {
+          tipo: '1',
+          imovel: response.data.imovel,
+          token: response.data.token,
+        };
+        console.tron.log('Isso é o que recebo: ', retorno);
+        resolve(retorno);
+      })
+      .catch(error => {
+        reject(error.response.data.error);
+      });
+  });
+}
+
 function* alterar(imovel) {
   const retorno = yield alterarImovel(imovel)
     .then(resp => {
@@ -57,8 +123,28 @@ function* alterar(imovel) {
   return retorno;
 }
 
+function excluirImovel(imovel) {
+  console.tron.log('Checando Exclusão: ', imovel);
+  return new Promise((resolve, reject) => {
+    deleteAxios(`/imovel/${imovel}`, 'COM_TOKEN_USUARIO')
+      .then(response => {
+        var retorno = {
+          tipo: '1',
+          usuario: response.data.usuario,
+          imovel: response.data.imovel,
+          token: response.data.token,
+        };
+        console.log('Dados Imóveis:', response);
+        resolve(retorno);
+      })
+      .catch(error => {
+        reject(error.response.data.error);
+      });
+  });
+}
+
 function* deletar(imovel) {
-  const retorno = yield excluirImovel(imovel.idImovel)
+  const retorno = yield excluirImovel(imovel._id)
     .then(resp => {
       var ret = {
         tipo: 1,
@@ -117,7 +203,7 @@ export function* manterImovel(action) {
         return;
       }
 
-      if (action.imovel.idImovel === 0) {
+      if (action.operacao === 'C') {
         ToastActionsCreators.displayInfo('Incluindo Imóvel');
         var retorno = yield incluir(action.imovel);
         if (retorno.tipo === 1) {
@@ -131,7 +217,7 @@ export function* manterImovel(action) {
           yield apresentarMensagem(1, action.imovel, retorno.mensagem);
           return;
         }
-      } else {
+      } else if (action.operacao === 'A') {
         ToastActionsCreators.displayInfo('Atualizando Imóvel');
         var retorno = yield alterar(action.imovel);
         if (retorno.tipo === 1) {
@@ -156,7 +242,7 @@ export function* manterImovel(action) {
 }
 
 function* apresentarMensagem(tipo, imovel, mensagem) {
-  console.tron.log('Dentro do apresentar mensagem');
+  ('Dentro do apresentar mensagem');
   console.tron.log(tipo);
   if (tipo === 1) {
     yield put(ImovelActions.registerInFailure());
@@ -182,7 +268,7 @@ function consistirDadosImovel(imovel) {
   if (imovel.email === '') {
     return 'Favor informar o Email.';
   }
-  if (imovel.logradouroImovel === '') {
+  if (imovel.logradouro === '') {
     return 'Favor informar o Logradouro do Imóvel.';
   }
   if (imovel.numero === '') {
@@ -204,26 +290,49 @@ function consistirDadosImovel(imovel) {
   return '';
 }
 
-function* lerImoveis() {
-  const retorno = yield obterTodos()
-    .then(resp => {
-      var ret = {
-        tipo: 1,
-        mensagem: '',
-        imoveis: resp,
-      };
+function* lerImoveis(action) {
+  console.tron.log('lerImoveis: ', action);
+  if (action.imovel === '') {
+    const retorno = yield obterTodos()
+      .then(resp => {
+        var ret = {
+          tipo: 1,
+          mensagem: '',
+          imoveis: resp,
+        };
 
-      return ret;
-    })
-    .catch(erro => {
-      var ret = {
-        tipo: 2,
-        mensagem: erro,
-        imoveis: [],
-      };
-      return ret;
-    });
-  return retorno;
+        return ret;
+      })
+      .catch(erro => {
+        var ret = {
+          tipo: 2,
+          mensagem: erro,
+          imoveis: [],
+        };
+        return ret;
+      });
+    return retorno;
+  } else {
+    const retorno = yield obterPesquisa(action)
+      .then(resp => {
+        var ret = {
+          tipo: 1,
+          mensagem: '',
+          imoveis: resp,
+        };
+
+        return ret;
+      })
+      .catch(erro => {
+        var ret = {
+          tipo: 2,
+          mensagem: erro,
+          imoveis: [],
+        };
+        return ret;
+      });
+    return retorno;
+  }
 }
 
 function obterTodos() {
@@ -232,11 +341,8 @@ function obterTodos() {
       .then(response => {
         var retorno = {
           tipo: '1',
-          usuario: response.data.usuario,
-          imovel: response.data.imovel,
-          token: response.data.token,
+          imovelList: response.data,
         };
-
         resolve(retorno);
       })
       .catch(error => {
@@ -245,12 +351,31 @@ function obterTodos() {
   });
 }
 
-export function* lerTodosImoveis() {
+function obterPesquisa(action) {
+  return new Promise((resolve, reject) => {
+    get(
+      `/imovel/findPaginate?DescricaoImovel=${action.action.descricaoImovel}`,
+      'COM_TOKEN_USUARIO',
+    )
+      .then(response => {
+        var retorno = {
+          tipo: '1',
+          imovelList: response.data,
+        };
+        resolve(retorno);
+      })
+      .catch(error => {
+        reject(error.response.data.error);
+      });
+  });
+}
+
+export function* lerTodosImoveis(action) {
   try {
     const {isConnected} = yield NetInfo.fetch();
     if (isConnected) {
       ToastActionsCreators.displayInfo('Lendo os imóveis');
-      var retorno = yield lerImoveis();
+      var retorno = yield lerImoveis(action);
       yield apresentarMensagem(
         4,
         retorno.imoveis,
